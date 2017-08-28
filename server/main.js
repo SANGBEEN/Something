@@ -2,16 +2,31 @@ import express from 'express';
 import path from 'path';
 import WebpackDevServer from 'webpack-dev-server';
 import webpack from 'webpack';
+import morgan from 'morgan';
+import bodyParser from 'body-parser';
+import session from 'express-session';
+
+import api from './routes';
+
 
 const app = express();
 const port = 3000;
 const devPort = 4000;
 
-app.use('/',express.static(path.join(__dirname,'./../public')));
+/* use session */
+app.use(session({
+    secret: '@#@$@something$1$234',
+    resave: false,
+    saveUninitialized: true
+}));
 
-app.get('/hello',(req,res)=>{
-    return res.send('hello');
-});
+app.use('/',express.static(path.join(__dirname,'./../public')));
+app.use(morgan('dev'));
+app.use(bodyParser.urlencoded({
+    extended: true
+}));
+app.use(bodyParser.json());
+app.use('/api', api);
 
 app.listen(port,()=>{
     console.log('Express is listening on port',port);
