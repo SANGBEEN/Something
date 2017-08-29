@@ -28,6 +28,10 @@ app.use(bodyParser.urlencoded({
 app.use(bodyParser.json());
 app.use('/api', api);
 
+app.get('*',(req,res)=>{
+    res.sendFile(path.resolve(__dirname,'./../public/index.html'));
+});
+
 app.listen(port,()=>{
     console.log('Express is listening on port',port);
 });

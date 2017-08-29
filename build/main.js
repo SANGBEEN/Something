@@ -47,12 +47,15 @@ app.use((0, _expressSession2.default)({
 
 app.use('/', _express2.default.static(_path2.default.join(__dirname, './../public')));
 app.use((0, _morgan2.default)('dev'));
+app.use(_bodyParser2.default.urlencoded({
+    extended: true
+}));
 app.use(_bodyParser2.default.json());
 app.use('/api', _routes2.default);
 
-app.get('/hello', function (req, res) {
-    return res.send('hello');
-});
+// app.get('*',(req,res)=>{
+//     res.sendFile(path.resolve(__dirname,'./../public/index.html'));
+// });
 
 app.listen(port, function () {
     console.log('Express is listening on port', port);

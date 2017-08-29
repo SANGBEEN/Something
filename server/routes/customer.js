@@ -2,16 +2,17 @@
 
 import express from 'express';
 import Customer from '../models/customer';
-import oracledb from 'oracledb';
-import dbconfig from '../../config/dbconfig';
-// oracledb.createPool(
-//
-// )
+// import oracledb from 'oracledb';
+// import dbconfig from '../../config/dbconfig';
+// // oracledb.createPool(
+// //
+// // )
 
 
 const router = express.Router();
 let Customers = new Map();
-
+let cus1 = new Customer('emp1', '1234', 22, 1231231);
+Customers.set(cus1.id,cus1);
 /**
  * 고객등록 post /api/customer
  * BODY SAMPLE : { "name":"test", "password":"pass", "age":10, "phone":1234}
@@ -48,25 +49,28 @@ router.post('/auth', (req,res)=>{
 });
 
 router.get('/', (req,res)=>{
-    //console.log(Customers);
-    oracledb.getConnection(
-        {
-            user: dbconfig.user,
-            password: dbconfig.password,
-            connectString : dbconfig.connectString
-        },
-        function(err, connection){
-            if(err){console.error(err.message);return;}
-            connection.execute(
-                "select name, password, age, phone from customer",
-                function (err, result) {
-                    if (err) {
-                        console.error(err.message);
-                        return;
-                    }
-                    console.log("result : ", result);
-                });
-        });
+    console.log(Customers);
+    for(let value of Customers){
+        console.log(value);
+    }
+    // oracledb.getConnection(
+    //     {
+    //         user: dbconfig.user,
+    //         password: dbconfig.password,
+    //         connectString : dbconfig.connectString
+    //     },
+    //     function(err, connection){
+    //         if(err){console.error(err.message);return;}
+    //         connection.execute(
+    //             "select name, password, age, phone from customer",
+    //             function (err, result) {
+    //                 if (err) {
+    //                     console.error(err.message);
+    //                     return;
+    //                 }
+    //                 console.log("result : ", result);
+    //             });
+    //     });
     res.json({success:true,result:Customers});
 });
 
@@ -82,3 +86,5 @@ router.delete('/:name', (req,res)=>{
 });
 
 export default router;
+
+
